@@ -1,1 +1,1 @@
-# Port Scanner - A Nmap Front-End
+# Port Scanner - An Nmap Front-End
