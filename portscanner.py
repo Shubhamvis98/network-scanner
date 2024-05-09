@@ -36,6 +36,11 @@ class Functions:
                 except psutil.NoSuchProcess as e:
                     print(f"Error terminating process {proc.info['pid']}: {e}")
 
+    def set_app_theme(theme_name, isdark=False):
+        settings = Gtk.Settings.get_default()
+        settings.set_property("gtk-theme-name", theme_name)
+        settings.set_property("gtk-application-prefer-dark-theme", isdark)
+
 class SplashScreen(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title=AppDetails.appname)
@@ -45,6 +50,7 @@ class SplashScreen(Gtk.Window):
         image = Gtk.Image()
         pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.png')
         image.set_from_pixbuf(pixbuf)
+        Functions.set_app_theme("Adwaita", True)
 
         self.add(image)
         self.show_all()
@@ -68,6 +74,7 @@ class Home(Functions):
 
         self.scan_btn.set_label('Scan')
         self.target.set_placeholder_text('Target')
+        # Functions.set_app_theme("Adwaita", True)
 
         self.profiles = [
             ('qs', 'Quick Scan'),
