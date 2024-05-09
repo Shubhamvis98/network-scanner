@@ -43,7 +43,7 @@ class SplashScreen(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
 
         image = Gtk.Image()
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file("logo.png")  # Replace "splash_image.png" with your image file
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.png')
         image.set_from_pixbuf(pixbuf)
 
         self.add(image)
@@ -66,8 +66,8 @@ class Home(Functions):
         self.status.set_editable(False)
         self.status.set_justification(Gtk.Justification.CENTER)
 
-        self.scan_btn.set_label("Scan")
-        self.target.set_placeholder_text("Target")
+        self.scan_btn.set_label('Scan')
+        self.target.set_placeholder_text('Target')
 
         self.profiles = [
             ('qs', 'Quick Scan'),
@@ -97,9 +97,9 @@ class Home(Functions):
         for profile in self.profiles:
             self.profile.append(profile[0], profile[1])
 
-        self.profile.connect("changed", self.on_profile_changed)
+        self.profile.connect('changed', self.on_profile_changed)
         self.profile.set_active(0)
-        self.scan_btn.connect("clicked", self.on_scan_clicked)
+        self.scan_btn.connect('clicked', self.on_scan_clicked)
         self.status_buffer = self.status.get_buffer()
         self.status_buffer.set_text(AppDetails.app_info)
 
@@ -128,8 +128,8 @@ class Home(Functions):
         target = self.target.get_text()
         opts = self.opts.get_text()
 
-        if target == "":
-            status.set_text("[!] Target is empty.")
+        if target == '':
+            status.set_text('[!] Target is empty.')
             return
 
         if self.scan_btn.get_label() == 'Scan':
@@ -143,7 +143,7 @@ class Home(Functions):
     def scan(self, target, opts):
         status = self.status_buffer
         self.run = self.get_output(f'nmap {opts} {target}', wait=True)
-        status.set_text("Scanning...")
+        status.set_text('Scanning...')
         status.set_text(self.run[0])
         self.scan_btn.set_label('Scan')
 
@@ -153,18 +153,18 @@ class PSGUI(Gtk.Application):
 
     def do_activate(self):
         builder = Gtk.Builder()
-        builder.add_from_file("portscanner.ui")
+        builder.add_from_file('portscanner.ui')
 
         # Initialize Functions
         Home(builder).run()
 
         # Get The main window from the glade file
-        window = builder.get_object("ps_main")
+        window = builder.get_object('ps_main')
         window.set_title(AppDetails.appname)
         window.set_default_size(600, 400)
 
         # Show the window
-        window.connect("destroy", Gtk.main_quit)
+        window.connect('destroy', Gtk.main_quit)
         window.show_all()
 
 if __name__ == "__main__":
