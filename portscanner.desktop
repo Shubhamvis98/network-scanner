@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Port Scanner
+Comment=An Nmap Front-End
+Encoding=UTF-8
+Exec=/usr/lib/portscanner/portscanner.py
+Icon=/usr/lib/portscanner/logo.png
+Terminal=true
+Type=Application
+Categories=01-info-gathering;01-04-network-scanners;02-vulnerability-analysis;
+X-Purism-FormFactor=Workstation;Mobile;
