@@ -2,7 +2,7 @@
 Name=Port Scanner
 Comment=An Nmap Front-End
 Encoding=UTF-8
-Exec=/usr/lib/portscanner/portscanner.py
+Exec=/usr/lib/portscanner/portscanner
 Icon=/usr/lib/portscanner/logo.png
 Terminal=true
 Type=Application
