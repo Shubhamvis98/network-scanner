@@ -18,8 +18,6 @@ Web: https://fossfrog.in
 Youtube: fossfrog
 _______________________________________________";
 
-    println!("{}", app_info);
-
     // Connect activate signal
     application.connect_activate(|app| {
         // Create the main window
