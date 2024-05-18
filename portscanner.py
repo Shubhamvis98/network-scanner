@@ -72,11 +72,13 @@ class AboutScreen(Gtk.Window):
 
         # Adding the logo
         logo = Gtk.Image.new_from_file("logo.png")
+        logo.set_margin_top(10)  # Set top margin
+        logo.set_margin_bottom(10)  # Set bottom margin
+        logo.set_margin_start(10)  # Set start (left for LTR languages) margin
+        logo.set_margin_end(10)  # Set end (right for LTR languages) margin
+        # Set a fixed size for the image (optional)
+        logo.set_size_request(100, 100)  # Set width and height
         self.box.pack_start(logo, False, False, 0)
-
-        label_name = Gtk.Label()
-        label_name.set_markup("<b>Developer Name:</b> Shubham Vishwakarma")
-        self.box.pack_start(label_name, False, False, 0)
 
         label_package = Gtk.Label()
         label_package.set_markup("<b>Package Name:</b> Port Scanner")
@@ -85,6 +87,10 @@ class AboutScreen(Gtk.Window):
         label_version = Gtk.Label()
         label_version.set_markup("<b>Version:</b> 1.2")
         self.box.pack_start(label_version, False, False, 0)
+
+        label_name = Gtk.Label()
+        label_name.set_markup("<b>Developer:</b> Shubham Vishwakarma")
+        self.box.pack_start(label_name, False, False, 0)
 
         label_website = Gtk.Label()
         label_website.set_markup("<b>Website:</b> <a href='https://fossfrog.in'>https://fossfrog.in</a>")
