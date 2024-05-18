@@ -71,6 +71,9 @@ class Home(Functions):
         self.status = self.builder.get_object('status')
         self.status.set_editable(False)
         self.status.set_justification(Gtk.Justification.CENTER)
+        self.mi_save = self.builder.get_object('mi_save').connect("activate", self.savebuffer)
+        self.mi_quit = self.builder.get_object('mi_quit').connect("activate", Gtk.main_quit)
+        self.mi_about = self.builder.get_object('mi_about').connect("activate", self.about)
 
         self.scan_btn.set_label('Scan')
         self.target.set_placeholder_text('Target')
@@ -111,6 +114,27 @@ class Home(Functions):
         self.status_buffer.set_text(AppDetails.app_info)
 
     def run(self):
+        pass
+
+    def savebuffer(self, widget):
+        tmpstatus = self.getStatus()
+
+        filechooser = Gtk.FileChooserDialog(title="Open Ducky", parent=None, action=Gtk.FileChooserAction.SAVE)
+        filechooser.add_buttons("_Save", Gtk.ResponseType.OK)
+        filechooser.add_buttons("_Cancel", Gtk.ResponseType.CANCEL)
+        filechooser.set_default_response(Gtk.ResponseType.OK)
+        response = filechooser.run()
+
+        if response == Gtk.ResponseType.OK:
+            try:
+                with open(filechooser.get_filename(), 'w') as f:
+                    f.write(tmpstatus)
+                self.setStatus('\n\n' + 'File Saved')
+            except PermissionError:
+                self.setStatus('\n\n' + 'File Not Saved, !!!Access Denied!!!')
+        filechooser.destroy()
+
+    def about(self, widget):
         pass
 
     def on_profile_changed(self, widget):
