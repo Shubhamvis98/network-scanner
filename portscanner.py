@@ -62,31 +62,28 @@ class SplashScreen(Gtk.Window):
         self.destroy()
 
 class AboutScreen(Gtk.Window):
-
     def __init__(self):
         Gtk.Window.__init__(self, title="About Port Scanner")
-        self.set_default_size(300, 250)
+        # self.set_default_size(300, 250)
 
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(self.box)
 
         # Adding the logo
-        logo = Gtk.Image.new_from_file("logo.png")
-        logo.set_margin_top(10)  # Set top margin
-        logo.set_margin_bottom(10)  # Set bottom margin
-        logo.set_margin_start(10)  # Set start (left for LTR languages) margin
-        logo.set_margin_end(10)  # Set end (right for LTR languages) margin
-        # Set a fixed size for the image (optional)
-        logo.set_size_request(100, 100)  # Set width and height
-        self.box.pack_start(logo, False, False, 0)
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file("logo.png")
+        scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
+        logo = Gtk.Image.new_from_pixbuf(scaled_pixbuf)
+        self.box.pack_start(logo, False, False, 10)
 
         label_package = Gtk.Label()
-        label_package.set_markup("<b>Package Name:</b> Port Scanner")
+        label_package.set_markup("<b>Port Scanner v1.0</b>")
         self.box.pack_start(label_package, False, False, 0)
-
-        label_version = Gtk.Label()
-        label_version.set_markup("<b>Version:</b> 1.2")
-        self.box.pack_start(label_version, False, False, 0)
+        
+        label_desc = Gtk.Label()
+        label_desc.set_markup("An Nmap Front-end for GNU/Linux Phones")
+        label_desc.set_margin_start(20)
+        label_desc.set_margin_end(20)
+        self.box.pack_start(label_desc, False, False, 0)
 
         label_name = Gtk.Label()
         label_name.set_markup("<b>Developer:</b> Shubham Vishwakarma")
