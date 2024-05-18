@@ -62,20 +62,46 @@ class SplashScreen(Gtk.Window):
         self.destroy()
 
 class AboutScreen(Gtk.Window):
+
     def __init__(self):
-        Gtk.Window.__init__(self, title=AppDetails.appname)
-        self.set_default_size(600, 400)
-        self.set_position(Gtk.WindowPosition.CENTER)
+        Gtk.Window.__init__(self, title="About Port Scanner")
+        self.set_default_size(300, 250)
 
-        image = Gtk.Image()
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.png')
-        image.set_from_pixbuf(pixbuf)
-        Functions.set_app_theme("Adwaita", True)
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.add(self.box)
 
-        self.add(image)
+        # Adding the logo
+        logo = Gtk.Image.new_from_file("logo.png")
+        self.box.pack_start(logo, False, False, 0)
+
+        label_name = Gtk.Label()
+        label_name.set_markup("<b>Developer Name:</b> Shubham Vishwakarma")
+        self.box.pack_start(label_name, False, False, 0)
+
+        label_package = Gtk.Label()
+        label_package.set_markup("<b>Package Name:</b> Port Scanner")
+        self.box.pack_start(label_package, False, False, 0)
+
+        label_version = Gtk.Label()
+        label_version.set_markup("<b>Version:</b> 1.2")
+        self.box.pack_start(label_version, False, False, 0)
+
+        label_website = Gtk.Label()
+        label_website.set_markup("<b>Website:</b> <a href='https://fossfrog.in'>https://fossfrog.in</a>")
+        label_website.set_line_wrap(True)
+        label_website.connect("activate-link", self.open_website)
+        self.box.pack_start(label_website, False, False, 0)
+
+        self.close_button = Gtk.Button(label="Close")
+        self.close_button.connect("clicked", self.on_close_clicked)
+        self.box.pack_end(self.close_button, False, False, 0)
         self.show_all()
 
-    def close_about_screen(self):
+    def open_website(self, widget, uri):
+        import webbrowser
+        webbrowser.open(uri)
+
+    def on_close_clicked(self, widget):
         self.destroy()
 
 class Home(Functions):
