@@ -61,6 +61,23 @@ class SplashScreen(Gtk.Window):
         main_window = PSGUI().run(None)
         self.destroy()
 
+class AboutScreen(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title=AppDetails.appname)
+        self.set_default_size(600, 400)
+        self.set_position(Gtk.WindowPosition.CENTER)
+
+        image = Gtk.Image()
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.png')
+        image.set_from_pixbuf(pixbuf)
+        Functions.set_app_theme("Adwaita", True)
+
+        self.add(image)
+        self.show_all()
+
+    def close_about_screen(self):
+        self.destroy()
+
 class Home(Functions):
     def __init__(self, builder):
         self.builder = builder
@@ -111,7 +128,7 @@ class Home(Functions):
         self.profile.set_active(0)
         self.scan_btn.connect('clicked', self.on_scan_clicked)
         self.status_buffer = self.status.get_buffer()
-        self.status_buffer.set_text(AppDetails.app_info)
+        # self.status_buffer.set_text(AppDetails.app_info)
 
     def run(self):
         pass
@@ -135,7 +152,9 @@ class Home(Functions):
         filechooser.destroy()
 
     def about(self, widget):
-        pass
+        # self.status_buffer.set_text(AppDetails.app_info)
+        AboutScreen()
+
 
     def on_profile_changed(self, widget):
         active_id = self.profile.get_active_id()
