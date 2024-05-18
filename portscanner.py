@@ -61,6 +61,52 @@ class SplashScreen(Gtk.Window):
         main_window = PSGUI().run(None)
         self.destroy()
 
+class AboutScreen(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="About Port Scanner")
+        # self.set_default_size(300, 250)
+
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.add(self.box)
+
+        # Adding the logo
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file("logo.png")
+        scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
+        logo = Gtk.Image.new_from_pixbuf(scaled_pixbuf)
+        self.box.pack_start(logo, False, False, 10)
+
+        label_package = Gtk.Label()
+        label_package.set_markup("<b>Port Scanner v1.0</b>")
+        self.box.pack_start(label_package, False, False, 0)
+        
+        label_desc = Gtk.Label()
+        label_desc.set_markup("An Nmap Front-end for GNU/Linux Phones")
+        label_desc.set_margin_start(20)
+        label_desc.set_margin_end(20)
+        self.box.pack_start(label_desc, False, False, 0)
+
+        label_name = Gtk.Label()
+        label_name.set_markup("<b>Developer:</b> Shubham Vishwakarma")
+        self.box.pack_start(label_name, False, False, 0)
+
+        label_website = Gtk.Label()
+        label_website.set_markup("<b>Website:</b> <a href='https://fossfrog.in'>https://fossfrog.in</a>")
+        label_website.set_line_wrap(True)
+        label_website.connect("activate-link", self.open_website)
+        self.box.pack_start(label_website, False, False, 0)
+
+        self.close_button = Gtk.Button(label="Close")
+        self.close_button.connect("clicked", self.on_close_clicked)
+        self.box.pack_end(self.close_button, False, False, 0)
+        self.show_all()
+
+    def open_website(self, widget, uri):
+        import webbrowser
+        webbrowser.open(uri)
+
+    def on_close_clicked(self, widget):
+        self.destroy()
+
 class Home(Functions):
     def __init__(self, builder):
         self.builder = builder
@@ -71,6 +117,9 @@ class Home(Functions):
         self.status = self.builder.get_object('status')
         self.status.set_editable(False)
         self.status.set_justification(Gtk.Justification.CENTER)
+        self.mi_save = self.builder.get_object('mi_save').connect("activate", self.savebuffer)
+        self.mi_quit = self.builder.get_object('mi_quit').connect("activate", Gtk.main_quit)
+        self.mi_about = self.builder.get_object('mi_about').connect("activate", self.about)
 
         self.scan_btn.set_label('Scan')
         self.target.set_placeholder_text('Target')
@@ -108,10 +157,33 @@ class Home(Functions):
         self.profile.set_active(0)
         self.scan_btn.connect('clicked', self.on_scan_clicked)
         self.status_buffer = self.status.get_buffer()
-        self.status_buffer.set_text(AppDetails.app_info)
+        # self.status_buffer.set_text(AppDetails.app_info)
 
     def run(self):
         pass
+
+    def savebuffer(self, widget):
+        tmpstatus = self.getStatus()
+
+        filechooser = Gtk.FileChooserDialog(title="Open Ducky", parent=None, action=Gtk.FileChooserAction.SAVE)
+        filechooser.add_buttons("_Save", Gtk.ResponseType.OK)
+        filechooser.add_buttons("_Cancel", Gtk.ResponseType.CANCEL)
+        filechooser.set_default_response(Gtk.ResponseType.OK)
+        response = filechooser.run()
+
+        if response == Gtk.ResponseType.OK:
+            try:
+                with open(filechooser.get_filename(), 'w') as f:
+                    f.write(tmpstatus)
+                self.setStatus('\n\n' + 'File Saved')
+            except PermissionError:
+                self.setStatus('\n\n' + 'File Not Saved, !!!Access Denied!!!')
+        filechooser.destroy()
+
+    def about(self, widget):
+        # self.status_buffer.set_text(AppDetails.app_info)
+        AboutScreen()
+
 
     def on_profile_changed(self, widget):
         active_id = self.profile.get_active_id()
