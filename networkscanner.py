@@ -9,6 +9,7 @@ from gi.repository import Gtk, GdkPixbuf, GLib
 class AppDetails:
     appname = 'Network Scanner'
     appversion = '1.0'
+    applogo = 'logo.svg'
     app_info = f'''_______________________________________________
 {appname} {appversion} - An Nmap Front-End
 by @ShubhamVis98
@@ -49,7 +50,7 @@ class SplashScreen(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
 
         image = Gtk.Image()
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.svg')
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file(AppDetails.applogo)
         scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
         image.set_from_pixbuf(scaled_pixbuf)
         Functions.set_app_theme("Adwaita", True)
@@ -72,7 +73,7 @@ class AboutScreen(Gtk.Window):
         self.add(self.box)
 
         # Adding the logo
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file("logo.svg")
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file(AppDetails.applogo)
         scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
         logo = Gtk.Image.new_from_pixbuf(scaled_pixbuf)
         self.box.pack_start(logo, False, False, 10)
