@@ -8,10 +8,11 @@ from gi.repository import Gtk, GdkPixbuf, GLib
 
 class AppDetails:
     appname = 'Network Scanner'
-    app_info = r'''_______________________________________________
-Network Scanner - An Nmap Front-End
+    appversion = '1.0'
+    app_info = f'''_______________________________________________
+{appname} {appversion} - An Nmap Front-End
 by @ShubhamVis98
-|
+
 git/twitter: ShubhamVis98
 Web: https://fossfrog.in
 Youtube: fossfrog
@@ -64,7 +65,7 @@ class SplashScreen(Gtk.Window):
 
 class AboutScreen(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="About Network Scanner")
+        Gtk.Window.__init__(self, title="About")
         # self.set_default_size(300, 250)
 
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -77,7 +78,7 @@ class AboutScreen(Gtk.Window):
         self.box.pack_start(logo, False, False, 10)
 
         label_package = Gtk.Label()
-        label_package.set_markup("<b>Network Scanner v1.0</b>")
+        label_package.set_markup(f'<b>{AppDetails.appname} {AppDetails.appversion}</b>')
         self.box.pack_start(label_package, False, False, 0)
         
         label_desc = Gtk.Label()
@@ -126,33 +127,23 @@ class Home(Functions):
         self.target.set_placeholder_text('Target')
         # Functions.set_app_theme("Adwaita", True)
 
-        self.profiles = [
-            ('qs', 'Quick Scan'),
-            ('qsp', 'Quick Scan Plus'),
-            ('qt', 'Quick Traceroute'),
-            ('rs', 'Regular Scan'),
-            ('ps', 'Ping Scan'),
-            ('is', 'Intense Scan'),
-            ('isu', 'Intense Scan Plus UDP'),
-            ('ist', 'Intense Scan, All TCP Ports'),
-            ('isnp', 'Intense Scan, No Ping'),
-            ('scs', 'Slow Comprehensive Scan'),
-            ]
-        self.prof_opts = {
-            'qs': '-T4 -F',
-            'qsp': '-sV -T4 -O -F --version-light',
-            'qt': '-sn --traceroute',
-            'rs': '',
-            'ps': '-sn',
-            'is': '-T4 -A -v',
-            'isu': '-sS -sU -T4 -A -v',
-            'ist': '-p 1-65535 -T4 -A -v',
-            'isnp': '-T4 -A -v -Pn',
-            'scs': '-sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)"',
-            }
+        self.profiles = {
+            'Quick Scan': '-T4 -F',
+            'Quick Scan Plus': '-sV -T4 -O -F --version-light',
+            'Quick Traceroute': '-sn --traceroute',
+            'Regular Scan': '',
+            'Ping Scan': '-sn',
+            'Intense Scan': '-T4 -A -v',
+            'Intense Scan Plus UDP': '-sS -sU -T4 -A -v',
+            'Intense Scan, All TCP Ports': '-p 1-65535 -T4 -A -v',
+            'Intense Scan, No Ping': '-T4 -A -v -Pn',
+            'Slow Comprehensive Scan': '-sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)"',
+            'Scan Vulnerabilities (vuln)': '--script vuln',
+            'Scan Vulnerabilities (vulners)': '-sV --script vulners',
+        }
 
-        for profile in self.profiles:
-            self.profile.append(profile[0], profile[1])
+        for profile in self.profiles.keys():
+            self.profile.append_text(profile)
 
         self.profile.connect('changed', self.on_profile_changed)
         self.profile.set_active(0)
@@ -187,44 +178,47 @@ class Home(Functions):
 
 
     def on_profile_changed(self, widget):
-        active_id = self.profile.get_active_id()
-        self.opts.set_text(self.prof_opts[active_id])
+        self.opts.set_text(self.profiles[self.profile.get_active_text()])
 
-    def setStatus(self, stsTxt, clear=False):
+    def setStatus(self, stsTxt=False, clear=False):
         if clear:
-            tmp = stsTxt
-        else:
-            tmp = self.getStatus() + '\n' + stsTxt
-        self.status_buffer.set_text(tmp)
-    
+            self.status_buffer.delete(self.status_buffer.get_start_iter(), self.status_buffer.get_end_iter())
+        if stsTxt:
+            self.status_buffer.insert(self.status_buffer.get_end_iter(), stsTxt)
+
     def getStatus(self):
         startIter, endIter = self.status_buffer.get_bounds()
         return(self.status_buffer.get_text(startIter, endIter, False))
 
     def on_scan_clicked(self, btn):
         self.status.set_justification(Gtk.Justification.LEFT)
-        status = self.status_buffer
-
         target = self.target.get_text()
         opts = self.opts.get_text()
 
         if target == '':
-            status.set_text('[!] Target is empty.')
+            self.setStatus('[!] Target is empty.', True)
             return
 
         if self.scan_btn.get_label() == 'Scan':
-            status.set_text('Scanning...')
-            tmp = threading.Thread(target=lambda: self.scan(target, opts)).start()
+            self.setStatus(False, True)
+            self.process = subprocess.Popen(f'nmap {opts} {target}', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            threading.Thread(target=self.read_output).start()
             self.scan_btn.set_label('Stop')
         else:
-            self.terminate_processes('nmap', target)
+            # self.terminate_processes('nmap', target)
+            self.process.terminate()
+            self.process = None
+            self.setStatus('\n\nTerminated')
             self.scan_btn.set_label('Scan')
 
-    def scan(self, target, opts):
-        status = self.status_buffer
-        self.run = self.get_output(f'nmap {opts} {target}', wait=True)
-        status.set_text('Scanning...')
-        status.set_text(self.run[0])
+    def read_output(self):
+        try:
+            while self.process.poll() is None:
+                line = self.process.stdout.readline().decode('utf-8')
+                if line:
+                    GLib.idle_add(self.setStatus, line)
+        except AttributeError:
+            pass
         self.scan_btn.set_label('Scan')
 
 class NSGUI(Gtk.Application):
