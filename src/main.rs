@@ -6,11 +6,11 @@ use glib::clone;
 fn main() {
     // Initialize GTK application
     let application = Application::builder()
-        .application_id("in.fossfrog.port_scanner")
+        .application_id("in.fossfrog.network_scanner")
         .build();
 
     let app_info = "_______________________________________________
-Port Scanner - An Nmap Front-End
+Network Scanner - An Nmap Front-End
 by @ShubhamVis98
 |
 git/twitter: ShubhamVis98
@@ -23,7 +23,7 @@ _______________________________________________";
         // Create the main window
         let window = ApplicationWindow::builder()
             .application(app)
-            .title("Port Scanner")
+            .title("Network Scanner")
             .default_width(600)
             .default_height(400)
             .build();
