@@ -126,33 +126,21 @@ class Home(Functions):
         self.target.set_placeholder_text('Target')
         # Functions.set_app_theme("Adwaita", True)
 
-        self.profiles = [
-            ('qs', 'Quick Scan'),
-            ('qsp', 'Quick Scan Plus'),
-            ('qt', 'Quick Traceroute'),
-            ('rs', 'Regular Scan'),
-            ('ps', 'Ping Scan'),
-            ('is', 'Intense Scan'),
-            ('isu', 'Intense Scan Plus UDP'),
-            ('ist', 'Intense Scan, All TCP Ports'),
-            ('isnp', 'Intense Scan, No Ping'),
-            ('scs', 'Slow Comprehensive Scan'),
-            ]
-        self.prof_opts = {
-            'qs': '-T4 -F',
-            'qsp': '-sV -T4 -O -F --version-light',
-            'qt': '-sn --traceroute',
-            'rs': '',
-            'ps': '-sn',
-            'is': '-T4 -A -v',
-            'isu': '-sS -sU -T4 -A -v',
-            'ist': '-p 1-65535 -T4 -A -v',
-            'isnp': '-T4 -A -v -Pn',
-            'scs': '-sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)"',
-            }
+        self.profiles = {
+            'Quick Scan': '-T4 -F',
+            'Quick Scan Plus': '-sV -T4 -O -F --version-light',
+            'Quick Traceroute': '-sn --traceroute',
+            'Regular Scan': '',
+            'Ping Scan': '-sn',
+            'Intense Scan': '-T4 -A -v',
+            'Intense Scan Plus UDP': '-sS -sU -T4 -A -v',
+            'Intense Scan, All TCP Ports': '-p 1-65535 -T4 -A -v',
+            'Intense Scan, No Ping': '-T4 -A -v -Pn',
+            'Slow Comprehensive Scan': '-sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)"',
+        }
 
-        for profile in self.profiles:
-            self.profile.append(profile[0], profile[1])
+        for profile in self.profiles.keys():
+            self.profile.append_text(profile)
 
         self.profile.connect('changed', self.on_profile_changed)
         self.profile.set_active(0)
@@ -187,8 +175,7 @@ class Home(Functions):
 
 
     def on_profile_changed(self, widget):
-        active_id = self.profile.get_active_id()
-        self.opts.set_text(self.prof_opts[active_id])
+        self.opts.set_text(self.profiles[self.profile.get_active_text()])
 
     def setStatus(self, stsTxt, clear=False):
         if clear:
