@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Port Scanner
+Name=Network Scanner
 Comment=An Nmap Front-End
 Encoding=UTF-8
-Exec=/usr/lib/portscanner/portscanner.py
-Icon=/usr/lib/portscanner/logo.png
+Exec=/usr/lib/networkcanner/networkcanner.py
+Icon=/usr/lib/networkcanner/logo.png
 Terminal=true
 Type=Application
 Categories=01-info-gathering;01-04-network-scanners;02-vulnerability-analysis;
