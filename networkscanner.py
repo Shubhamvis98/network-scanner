@@ -138,6 +138,8 @@ class Home(Functions):
             'Intense Scan, All TCP Ports': '-p 1-65535 -T4 -A -v',
             'Intense Scan, No Ping': '-T4 -A -v -Pn',
             'Slow Comprehensive Scan': '-sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)"',
+            'Scan Vulnerabilities (vuln)': '-v --script vuln',
+            'Scan Vulnerabilities (vulners)': '-v --script vulners',
         }
 
         for profile in self.profiles.keys():
