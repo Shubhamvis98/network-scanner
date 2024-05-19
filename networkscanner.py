@@ -7,9 +7,9 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GLib
 
 class AppDetails:
-    appname = 'Port Scanner'
+    appname = 'Network Scanner'
     app_info = r'''_______________________________________________
-Port Scanner - An Nmap Front-End
+Network Scanner - An Nmap Front-End
 by @ShubhamVis98
 |
 git/twitter: ShubhamVis98
@@ -48,8 +48,9 @@ class SplashScreen(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
 
         image = Gtk.Image()
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.png')
-        image.set_from_pixbuf(pixbuf)
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file('logo.svg')
+        scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
+        image.set_from_pixbuf(scaled_pixbuf)
         Functions.set_app_theme("Adwaita", True)
 
         self.add(image)
@@ -58,25 +59,25 @@ class SplashScreen(Gtk.Window):
         GLib.timeout_add_seconds(2, self.close_splash_screen)
 
     def close_splash_screen(self):
-        main_window = PSGUI().run(None)
+        main_window = NSGUI().run(None)
         self.destroy()
 
 class AboutScreen(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="About Port Scanner")
+        Gtk.Window.__init__(self, title="About Network Scanner")
         # self.set_default_size(300, 250)
 
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(self.box)
 
         # Adding the logo
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file("logo.png")
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file("logo.svg")
         scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
         logo = Gtk.Image.new_from_pixbuf(scaled_pixbuf)
         self.box.pack_start(logo, False, False, 10)
 
         label_package = Gtk.Label()
-        label_package.set_markup("<b>Port Scanner v1.0</b>")
+        label_package.set_markup("<b>Network Scanner v1.0</b>")
         self.box.pack_start(label_package, False, False, 0)
         
         label_desc = Gtk.Label()
@@ -226,19 +227,19 @@ class Home(Functions):
         status.set_text(self.run[0])
         self.scan_btn.set_label('Scan')
 
-class PSGUI(Gtk.Application):
+class NSGUI(Gtk.Application):
     def __init__(self):
-        Gtk.Application.__init__(self, application_id="in.fossfrog.portscanner")
+        Gtk.Application.__init__(self, application_id="in.fossfrog.networkscanner")
 
     def do_activate(self):
         builder = Gtk.Builder()
-        builder.add_from_file('portscanner.ui')
+        builder.add_from_file('networkscanner.ui')
 
         # Initialize Functions
         Home(builder).run()
 
         # Get The main window from the glade file
-        window = builder.get_object('ps_main')
+        window = builder.get_object('ns_main')
         window.set_title(AppDetails.appname)
         window.set_default_size(600, 400)
 
@@ -247,7 +248,7 @@ class PSGUI(Gtk.Application):
         window.show_all()
 
 if __name__ == "__main__":
-    # nh = PSGUI().run(None)
+    # nh = NSGUI().run(None)
     # Gtk.main()
     splash_screen = SplashScreen()
     Gtk.main()
