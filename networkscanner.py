@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # Author Shubham Vishwakarma
 # git/twitter: ShubhamVis98
 
@@ -9,7 +9,9 @@ from gi.repository import Gtk, GdkPixbuf, GLib
 class AppDetails:
     appname = 'Network Scanner'
     appversion = '1.0'
-    applogo = 'logo.svg'
+    appinstallpath = '/usr/lib/networkscanner'
+    ui = f'{appinstallpath}/networkscanner.ui'
+    applogo = f'{appinstallpath}/logo.svg'
     app_info = f'''_______________________________________________
 {appname} {appversion} - An Nmap Front-End
 by @ShubhamVis98
@@ -234,7 +236,7 @@ class NSGUI(Gtk.Application):
 
     def do_activate(self):
         builder = Gtk.Builder()
-        builder.add_from_file('networkscanner.ui')
+        builder.add_from_file(AppDetails.ui)
 
         # Initialize Functions
         Home(builder).run()
