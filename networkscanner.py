@@ -186,10 +186,15 @@ class Home(Functions):
             self.status_buffer.delete(self.status_buffer.get_start_iter(), self.status_buffer.get_end_iter())
         if stsTxt:
             self.status_buffer.insert(self.status_buffer.get_end_iter(), stsTxt)
+        GLib.idle_add(self.scroll_to_end, self.status_buffer)
 
     def getStatus(self):
         startIter, endIter = self.status_buffer.get_bounds()
         return(self.status_buffer.get_text(startIter, endIter, False))
+
+    def scroll_to_end(self, buffer):
+        end_iter = buffer.get_end_iter()
+        self.status.scroll_to_iter(end_iter, 0.0, True, 0.0, 1.0)
 
     def on_scan_clicked(self, btn):
         self.status.set_justification(Gtk.Justification.LEFT)
