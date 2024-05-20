@@ -2,9 +2,9 @@
 Name=Network Scanner
 Comment=An Nmap Front-End
 Encoding=UTF-8
-Exec=/usr/lib/networkcanner/networkscanner.py
+Exec=/usr/lib/networkscanner/networkscanner.py
 Icon=/usr/lib/networkscanner/logo.svg
-Terminal=true
+Terminal=false
 Type=Application
 Categories=01-info-gathering;01-04-network-scanners;02-vulnerability-analysis;
 X-Purism-FormFactor=Workstation;Mobile;
