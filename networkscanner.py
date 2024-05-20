@@ -106,6 +106,7 @@ class AboutScreen(Gtk.Window):
     def open_website(self, widget, uri):
         import webbrowser
         webbrowser.open(uri)
+        return True
 
     def on_close_clicked(self, widget):
         self.destroy()
