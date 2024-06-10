@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Author Shubham Vishwakarma
+# Author: Shubham Vishwakarma
 # git/twitter: ShubhamVis98
 
 import gi, threading, subprocess, psutil
