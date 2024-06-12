@@ -34,11 +34,13 @@ banner
 
 install_dir='/usr/lib/networkscanner'
 desktop_file='/usr/share/applications/networkscanner.desktop'
+icon_path='/usr/share/icons/hicolor/scalable/apps/in.fossfrog.networkscanner.svg'
 
 case $1 in
 	install)
 		mkdir -v $install_dir
-		cp -rv logo.svg networkscanner.py networkscanner.ui $install_dir
+		cp -rv logo.svg $icon_path
+		cp -rv networkscanner.py networkscanner.ui $install_dir
 		cp -v networkscanner.desktop $desktop_file
 		chown root:root -R $install_dir
 		chmod 644 $desktop_file
@@ -48,6 +50,7 @@ case $1 in
 		;;
 	uninstall)
 		[ ! -d $install_dir ] && echo "Network Scanner not found." && exit
+		rm -v $icon_path
 		rm -vrf $install_dir
 		rm -v $desktop_file
 

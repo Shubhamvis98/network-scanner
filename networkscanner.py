@@ -11,7 +11,7 @@ class AppDetails:
     appversion = '1.0'
     appinstallpath = '/usr/lib/networkscanner'
     ui = f'{appinstallpath}/networkscanner.ui'
-    applogo = f'{appinstallpath}/logo.svg'
+    applogo = 'in.fossfrog.networkscanner'
     app_info = f'''_______________________________________________
 {appname} {appversion} - An Nmap Front-End
 by @ShubhamVis98
@@ -52,7 +52,8 @@ class SplashScreen(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
 
         image = Gtk.Image()
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(AppDetails.applogo)
+        icon_theme = Gtk.IconTheme.get_default()
+        pixbuf = icon_theme.load_icon(AppDetails.applogo, 200, 0)
         scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
         image.set_from_pixbuf(scaled_pixbuf)
         Functions.set_app_theme("Adwaita", True)
