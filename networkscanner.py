@@ -54,8 +54,8 @@ class SplashScreen(Gtk.Window):
         image = Gtk.Image()
         icon_theme = Gtk.IconTheme.get_default()
         pixbuf = icon_theme.load_icon(AppDetails.applogo, 200, 0)
-        scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
-        image.set_from_pixbuf(scaled_pixbuf)
+        #scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
+        image.set_from_pixbuf(pixbuf)
         Functions.set_app_theme("Adwaita", True)
 
         self.add(image)
@@ -76,10 +76,11 @@ class AboutScreen(Gtk.Window):
         self.add(self.box)
 
         # Adding the logo
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(AppDetails.applogo)
-        scaled_pixbuf = pixbuf.scale_simple(200, 200, GdkPixbuf.InterpType.BILINEAR)
-        logo = Gtk.Image.new_from_pixbuf(scaled_pixbuf)
-        self.box.pack_start(logo, False, False, 10)
+        image = Gtk.Image()
+        icon_theme = Gtk.IconTheme.get_default()
+        pixbuf = icon_theme.load_icon(AppDetails.applogo, 150, 0)
+        image.set_from_pixbuf(pixbuf)
+        self.box.pack_start(image, False, False, 10)
 
         label_package = Gtk.Label()
         label_package.set_markup(f'<b>{AppDetails.appname} {AppDetails.appversion}</b>')
