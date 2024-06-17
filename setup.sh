@@ -45,6 +45,7 @@ case $1 in
 		chown root:root -R $install_dir
 		chmod 644 $desktop_file
 		chmod +x $install_dir/networkscanner.py
+		gtk-update-icon-cache /usr/share/icons/hicolor
 
 		echo '[+]Installation Completed'
 		;;
