@@ -235,6 +235,7 @@ class Home(Functions):
 class NSGUI(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(self, application_id="in.fossfrog.networkscanner")
+        Gtk.Window.set_default_icon_name(AppDetails.applogo)
 
     def do_activate(self):
         builder = Gtk.Builder()

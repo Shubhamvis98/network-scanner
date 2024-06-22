@@ -39,7 +39,7 @@ icon_path='/usr/share/icons/hicolor/scalable/apps/in.fossfrog.networkscanner.svg
 case $1 in
 	install)
 		mkdir -v $install_dir
-		cp -rv logo.svg $icon_path
+		cp -rv `basename $icon_path` $icon_path
 		cp -rv networkscanner.py networkscanner.ui $install_dir
 		cp -v networkscanner.desktop $desktop_file
 		chown root:root -R $install_dir
