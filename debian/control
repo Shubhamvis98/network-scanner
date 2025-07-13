@@ -12,5 +12,7 @@ Vcs-Git: https://github.com/shubhamvis98/hijacker.git
 
 Package: network-scanner
 Architecture: all
-Depends: nmap
-Description: An nmap front-end for Linux Phones.
+Depends: nmap, python3
+Description: Nmap front-end for Linux Phones.
+ Network Scanner is a Python-based tool to scan local or remote networks.
+ It supports multiple scanning techniques and provides a simple GUI.
